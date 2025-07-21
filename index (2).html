@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Project Carousel Portfolio</title>
+    <style>
+        /* Reset and Base Styles */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f0f23 100%);
+            background-attachment: fixed;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background particles animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.15), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(139, 69, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.1), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(64, 224, 255, 0.2), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.1), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: particles 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes particles {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Scroll progress indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c084fc);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Fade In Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: fadeInLeft 1s ease forwards;
+        }
+
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: fadeInRight 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(139, 69, 255, 0.1) 0%, rgba(64, 224, 255, 0.05) 50%, rgba(0, 255, 127, 0.1) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 49%, rgba(139, 69, 255, 0.03) 50%, transparent 51%);
+            animation: heroPattern 8s ease-in-out infinite;
+        }
+
+        @keyframes heroPattern {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+        }
+
+        /* Floating geometric shapes */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #8b5cf6, #a78bfa);
+            border-radius: 50%;
+            animation-delay: -2s;
+            animation-duration: 6s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #40e0ff, #64b5f6);
+            transform: rotate(45deg);
+            animation-delay: -4s;
+            animation-duration: 8s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #00ff7f, #4ade80);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-delay: -1s;
+            animation-duration: 10s;
+        }
+
+        .shape:nth-child(4) {
+            top: 40%;
+            right: 30%;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #8b5cf6, #c084fc);
+            border-radius: 10px;
+            animation-delay: -3s;
+            animation-duration: 7s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-40px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-20px) rotate(270deg);
+            }
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #a78bfa;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: typewriter 2s steps(20) 0.5s forwards;
+        }
+
+        @keyframes typewriter {
+            0% { 
+                opacity: 1; 
+                width: 0; 
+                border-right: 2px solid #a78bfa;
+            }
+            99% { 
+                border-right: 2px solid #a78bfa;
+            }
+            100% { 
+                opacity: 1; 
+                width: 100%; 
+                border-right: none;
+            }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #e0e7ff, #c7d2fe, #a5b4fc, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            animation: textGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes textGlow {
+            0% { 
+                text-shadow: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2);
+                filter: brightness(1);
+            }
+            100% { 
+                text-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.4);
+                filter: brightness(1.2);
+            }
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #bbb;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            border: 2px solid #8b5cf6;
+            color: #e0e7ff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 60px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.1);
+            min-height: 48px;
+            min-width: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover,
+        .cta-button:focus-visible {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.2));
+            color: #fff;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), inset 0 0 30px rgba(139, 92, 246, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            border-color: #a78bfa;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 3rem 1rem 4rem;
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.3) 0%, rgba(15, 15, 35, 0.7) 100%);
+            text-align: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            position: relative;
+        }
+
+        .projects::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.05) 0%, transparent 50%, rgba(64, 224, 255, 0.05) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .projects h2 {
+            font-size: clamp(2rem, 6vw, 2.8rem);
+            font-weight: 900;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Carousel Styles */
+        #carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            perspective: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        #projectCarousel {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .project-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: center center;
+            transform-style: preserve-3d;
+            width: 300px;
+            height: 400px;
+            margin: -200px 0 0 -150px;
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.8) 0%, rgba(15, 15, 35, 0.9) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.3), 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, transparent 50%, rgba(64, 224, 255, 0.1) 100%);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover,
+        .project-card:focus-within {
+            box-shadow: 0 25px 60px rgba(139, 92, 246, 0.6), 0 10px 30px rgba(139, 92, 246, 0.4);
+            transform: translateY(-10px) rotateX(5deg);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .project-image {
+            flex-shrink: 0;
+            margin-bottom: 1rem;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover img,
+        .project-card:focus-within img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-content h3 {
+            margin-bottom: 0.5rem;
+            color: #e0e7ff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-content p {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .tags {
+            margin: 0.5rem 0;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tags span {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+            color: #c7d2fe;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 25px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .tags span:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.2));
+            color: #e0e7ff;
+            transform: scale(1.05);
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+            color: #e0e7ff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            border-radius: 25px;
+            transition: all 0.4s ease;
+            min-height: 40px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .project-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .project-link:hover::before {
+            left: 100%;
+        }
+
+        .project-link:hover,
+        .project-link:focus {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.3));
+            color: #fff;
+            transform: translateY(-2px) scale(1.02);
+            border-color: #a78bfa;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .project-link span {
+            margin-left: 6px;
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover span {
+            transform: translateX(3px);
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(139, 92, 246, 0.6));
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+            z-index: 10;
+            transition: all 0.4s ease;
+            min-height: 60px;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .carousel-btn:hover,
+        .carousel-btn:focus {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 1), rgba(139, 92, 246, 0.8));
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+            transform: translateY(-50%) scale(1.1);
+            border-color: #a78bfa;
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
+        /* Mobile carousel indicators */
+        .carousel-indicators {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(51, 102, 255, 0.3);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .indicator.active {
+            background: #3388ff;
+        }
+
+        /* Touch gesture hint */
+        .touch-hint {
+            display: none;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 4rem 2rem 6rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #c7d2fe;
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.2) 0%, rgba(15, 15, 35, 0.4) 100%);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.03) 0%, transparent 50%, rgba(64, 224, 255, 0.03) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .contact h2 {
+            font-size: clamp(2rem, 6vw, 2.6rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 1rem;
+            }
+
+            .projects {
+                padding: 2rem 0.5rem 3rem;
+            }
+
+            #carousel-container {
+                height: 450px;
+                perspective: 800px;
+            }
+
+            /* Mobile carousel: show one card at a time, centered */
+            #projectCarousel.mobile-mode {
+                transform-style: flat;
+            }
+
+            .project-card {
+                width: 280px;
+                height: 380px;
+                margin: -190px 0 0 -140px;
+                transition: all 0.5s ease;
+            }
+
+            .project-image img {
+                height: 120px;
+            }
+
+            .project-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .project-content p {
+                font-size: 0.85rem;
+            }
+
+            .tags span {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+
+            .project-link {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+                min-height: 44px;
+            }
+
+            .carousel-btn {
+                font-size: 2rem;
+                padding: 8px 12px;
+                min-height: 50px;
+                min-width: 50px;
+            }
+
+            .carousel-btn.prev {
+                left: 5px;
+            }
+
+            .carousel-btn.next {
+                right: 5px;
+            }
+
+            .carousel-indicators {
+                display: flex;
+            }
+
+            .touch-hint {
+                display: block;
+            }
+
+            .contact {
+                padding: 3rem 1rem 4rem;
+            }
+
+            .cta-button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                min-height: 90vh;
+            }
+
+            .subtitle {
+                font-size: 0.75rem;
+            }
+
+            #carousel-container {
+                height: 400px;
+            }
+
+            .project-card {
+                width: 260px;
+                height: 350px;
+                margin: -175px 0 0 -130px;
+                padding: 0.8rem;
+            }
+
+            .project-image img {
+                height: 100px;
+            }
+
+            .project-content h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .project-content p {
+                font-size: 0.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .tags {
+                gap: 4px;
+                margin: 0.3rem 0;
+            }
+
+            .tags span {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+            }
+
+            .project-link {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+                margin-top: 0.3rem;
+            }
+
+            .carousel-btn {
+                font-size: 1.8rem;
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .projects {
+                padding: 1.5rem 0.5rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .project-card {
+                width: 240px;
+                height: 320px;
+                margin: -160px 0 0 -120px;
+            }
+
+            .project-image img {
+                height: 90px;
+            }
+
+            .carousel-btn.prev {
+                left: 2px;
+            }
+
+            .carousel-btn.next {
+                right: 2px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .project-image img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Hover states for touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .project-card:hover {
+                box-shadow: 0 12px 30px rgb(51 102 255 / 0.4);
+            }
+
+            .project-card:active {
+                box-shadow: 0 24px 60px rgb(51 102 255 / 0.9);
+                transform: scale(0.98);
+            }
+
+            .cta-button:hover {
+                background: transparent;
+                color: #3388ff;
+                transform: none;
+            }
+
+            .cta-button:active {
+                background: #3388ff;
+                color: #fff;
+                transform: scale(0.98);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" aria-label="Hero Section">
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+            <div class="hero-content fade-in">
+                <span class="subtitle">Web Developer</span>
+                <h1>Creating Digital<br />Experiences</h1>
+                <p>I design and build beautiful websites that help businesses grow</p>
+                <a href="#projects" class="cta-button">View Our Work</a>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects fade-in" aria-label="Projects">
+            <h2>Featured Projects</h2>
+            <div id="carousel-container">
+                <div id="projectCarousel" aria-live="polite"></div>
+                <button class="carousel-btn prev" aria-label="Previous project">‹</button>
+                <button class="carousel-btn next" aria-label="Next project">›</button>
+            </div>
+            <div class="carousel-indicators" id="indicators"></div>
+            <p class="touch-hint">← Swipe or use arrows to navigate →</p>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact fade-in" aria-label="Contact Section">
+            <h2>Let's Work Together</h2>
+            <p>I'm currently available for freelance projects.<br>If you have a project that you want to get started,
+                get in touch.</p>
+            <a href="mailto:fadevolopment@gmail.com" class="cta-button">Contact Me</a>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const carousel = document.getElementById("projectCarousel");
+            const btnPrev = document.querySelector(".carousel-btn.prev");
+            const btnNext = document.querySelector(".carousel-btn.next");
+            const indicators = document.getElementById("indicators");
+            let cards = [];
+            let isMobile = window.innerWidth <= 768;
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            const projects = [
+                {
+                    title: "Restaurant Platform",
+                    description: "A modern e-commerce platform built with React and Node.js",
+                    image: "https://www.restaurant-menu.net/assets/restaurant-menu/img/pages/how-to-make-your-own-restaurant-menu/card1-a26a7a2186.png.webp",
+                    tags: ["React", "Node.js", "MongoDB"],
+                    url: "https://muhammed-f.github.io/Poke/"
+                },
+                {
+                    title: "Portfolio Website",
+                    description: "A personal portfolio website showcasing our work",
+                    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+                    tags: ["HTML", "CSS", "JavaScript"],
+                    url: "https://example.com/project2"
+                },
+                {
+                    title: "Task Management App",
+                    description: "A productivity app for managing daily tasks",
+                    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+                    tags: ["JavaScript", "CSS", "Firebase"],
+                    url: "https://example.com/project3"
+                },
+                {
+                    title: "Designer Tools",
+                    description: "Visual content created with Figma, Photoshop, InDesign and Premier Pro",
+                    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+                    tags: ["Figma", "Photoshop", "InDesign", "Premier Pro"],
+                    url: "https://example.com/designer"
+                },
+                {
+                    title: "Game Development",
+                    description: "Indie games built with C#, Python, and Unity Hub",
+                    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420",
+                    tags: ["C#", "Python", "Unity Hub"],
+                    url: "https://example.com/game-dev"
+                }
+            ];
+
+            const radius = 300;
+            let currIndex = 0;
+            let theta;
+
+            function createProjectCard({ title, description, image, tags, url }, index) {
+                const article = document.createElement("article");
+                article.className = "project-card";
+                article.setAttribute("tabindex", "0");
+
+                article.innerHTML = `
+                    <div class="project-image">
+                        <img src="${image}" alt="${title} screenshot" loading="lazy" />
+                    </div>
+                    <div class="project-content">
+                        <h3>${title}</h3>
+                        <p>${description}</p>
+                        <div class="tags">
+                            ${tags.map(tag => `<span>${tag}</span>`).join('')}
+                        </div>
+                        <a href="${url}" class="project-link" target="_blank" rel="noopener noreferrer" aria-label="View ${title} project">
+                            View Project <span>→</span>
+                        </a>
+                    </div>
+                `;
+
+                // Add click handler for better mobile interaction
+                article.addEventListener('click', function(e) {
+                    if (e.target.closest('.project-link')) {
+                        return; // Let the link handle the click
+                    }
+                    
+                    if (isMobile) {
+                        // On mobile, clicking the card can also navigate to the project
+                        const link = article.querySelector('.project-link');
+                        if (link) {
+                            window.open(link.href, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                });
+
+                return article;
+            }
+
+            function createIndicators() {
+                indicators.innerHTML = '';
+                projects.forEach((_, index) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'indicator';
+                    if (index === currIndex) {
+                        indicator.classList.add('active');
+                    }
+                    indicator.addEventListener('click', () => goToSlide(index));
+                    indicators.appendChild(indicator);
+                });
+            }
+
+            function updateIndicators() {
+                const indicatorElements = indicators.querySelectorAll('.indicator');
+                indicatorElements.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currIndex);
+                });
+            }
+
+            function setupCarousel() {
+                carousel.innerHTML = '';
+                cards = [];
+
+                projects.forEach((project, i) => {
+                    const card = createProjectCard(project, i);
+                    cards.push(card);
+                    carousel.appendChild(card);
+                });
+
+                if (isMobile) {
+                    carousel.classList.add('mobile-mode');
+                    setupMobileCarousel();
+                } else {
+                    carousel.classList.remove('mobile-mode');
+                    setup3DCarousel();
+                }
+
+                createIndicators();
+            }
+
+            function setup3DCarousel() {
+                theta = 360 / projects.length;
+                
+                cards.forEach((card, i) => {
+                    const angle = theta * i;
+                    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+                });
+
+                updateCarousel();
+            }
+
+            function setupMobileCarousel() {
+                cards.forEach((card, i) => {
+                    card.style.transform = '';
+                    card.style.display = i === currIndex ? 'flex' : 'none';
+                });
+            }
+
+            function updateCarousel() {
+                if (isMobile) {
+                    cards.forEach((card, i) => {
+                        card.style.display = i === currIndex ? 'flex' : 'none';
+                    });
+                } else {
+                    const angle = theta * currIndex * -1;
+                    carousel.style.transform = `translateZ(-${radius}px) rotateY(${angle}deg)`;
+                }
+                updateIndicators();
+            }
+
+            function nextProject() {
+                currIndex = (currIndex + 1) % projects.length;
+                updateCarousel();
+            }
+
+            function prevProject() {
+                currIndex = (currIndex - 1 + projects.length) % projects.length;
+                updateCarousel();
+            }
+
+            function goToSlide(index) {
+                currIndex = index;
+                updateCarousel();
+            }
+
+            // Touch handling for mobile swipe
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }
+
+            function handleSwipeGesture() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextProject();
+                    } else {
+                        prevProject();
+                    }
+                }
+            }
+
+            // Event listeners
+            btnPrev.addEventListener("click", prevProject);
+            btnNext.addEventListener("click", nextProject);
+
+            // Touch events for swipe navigation
+            carousel.addEventListener('touchstart', handleTouchStart, { passive: true });
+            carousel.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    prevProject();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowRight') {
+                    nextProject();
+                    e.preventDefault();
+                }
+            });
+
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    const wasMobile = isMobile;
+                    isMobile = window.innerWidth <= 768;
+                    
+                    if (wasMobile !== isMobile) {
+                        setupCarousel();
+                    }
+                }, 250);
+            });
+
+            // Auto-rotate carousel on desktop (optional)
+            let autoRotateInterval;
+            function startAutoRotate() {
+                if (!isMobile) {
+                    autoRotateInterval = setInterval(nextProject, 5000);
+                }
+            }
+
+            function stopAutoRotate() {
+                clearInterval(autoRotateInterval);
+            }
+
+            // Pause auto-rotate on hover/focus
+            carousel.addEventListener('mouseenter', stopAutoRotate);
+            carousel.addEventListener('mouseleave', startAutoRotate);
+            carousel.addEventListener('focusin', stopAutoRotate);
+            carousel.addEventListener('focusout', startAutoRotate);
+
+            // Initialize carousel
+            setupCarousel();
+            startAutoRotate();
+
+            // Image lazy loading error handling
+            carousel.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    e.target.style.background = 'linear-gradient(45deg, #333, #555)';
+                    e.target.alt = 'Image could not be loaded';
+                }
+            }, true);
+
+            // Improve accessibility
+            carousel.setAttribute('role', 'region');
+            carousel.setAttribute('aria-label', 'Project showcase carousel');
+            
+            // Add ARIA live region updates
+            function announceSlideChange() {
+                const currentProject = projects[currIndex];
+                const announcement = `Showing project ${currIndex + 1} of ${projects.length}: ${currentProject.title}`;
+                
+                // Create temporary announcement for screen readers
+                const announcement_el = document.createElement('div');
+                announcement_el.setAttribute('aria-live', 'polite');
+                announcement_el.setAttribute('aria-atomic', 'true');
+                announcement_el.style.position = 'absolute';
+                announcement_el.style.left = '-10000px';
+                announcement_el.style.width = '1px';
+                announcement_el.style.height = '1px';
+                announcement_el.style.overflow = 'hidden';
+                announcement_el.textContent = announcement;
+                
+                document.body.appendChild(announcement_el);
+                
+                setTimeout(() => {
+                    document.body.removeChild(announcement_el);
+                }, 1000);
+            }
+
+            // Update the carousel functions to include accessibility announcements
+            const originalNextProject = nextProject;
+            const originalPrevProject = prevProject;
+            const originalGoToSlide = goToSlide;
+
+            nextProject = function() {
+                originalNextProject();
+                announceSlideChange();
+            };
+
+            prevProject = function() {
+                originalPrevProject();
+                announceSlideChange();
+            };
+
+            goToSlide = function(index) {
+                originalGoToSlide(index);
+                announceSlideChange();
+            };
+
+        })();
+
+        // Scroll progress indicator
+        function updateScrollProgress() {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.2s';
+                    entry.target.style.animationFillMode = 'forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect for floating shapes
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.shape');
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + (index * 0.1);
+                const yPos = -(scrolled * speed);
+                shape.style.transform = `translateY(${yPos}px) rotate(${scrolled * 0.1}deg)`;
+            });
+        }
+
+        // Smooth scroll polyfill for older browsers
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll event listeners
+        let ticking = false;
+
+        function updateOnScroll() {
+            updateScrollProgress();
+            updateParallax();
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateOnScroll);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('load', updateScrollProgress);
+        window.addEventListener('resize', updateScrollProgress);
+    </script>
+</body>
+
+</html>
